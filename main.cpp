@@ -10,32 +10,13 @@
 
 #include<iostream>
 #include<string>
+#include<memory>
+#include<vector>
 
 #include"Shader.h"
 #include"Camera.h"
 #include"Box.h"
 
-
-
-unsigned int createShaderProgram(const char* vertexSrc, const char* fragmentSrc) {
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexSrc, NULL);
-	glCompileShader(vertexShader);
-
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentSrc, NULL);
-	glCompileShader(fragmentShader);
-
-	unsigned int program = glCreateProgram();
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, fragmentShader);
-	glLinkProgram(program);
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	return program;
-}
 
 Camera myContextCamera;
 double lastX, lastY;
@@ -74,8 +55,9 @@ int main() {
 
 	Shader shader("shader/default.vs", "shader/default.fs");
 
-	Box myBox(1.0f, 1.0f, 1.0f);
-	glm::mat4 model = glm::mat4(1.0f);
+	std::vector<std::shared_ptr<Geometry>> sceneObjects;
+	int selectedIndex = -1;
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -85,28 +67,39 @@ int main() {
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::Begin("Inspector");
-		if (ImGui::Button("Create Cube"))
+		ImGui::Begin("Scene Tree");
+		if (ImGui::Button("Add New Box"))
 		{
-
+			std::string name = "Box" + std::to_string(sceneObjects.size());
+			sceneObjects.push_back(std::make_shared<Box>(name));
 		}
 
-		static bool showWireframe = true;
-		ImGui::Checkbox("Show Edges", &showWireframe);
+		ImGui::Separator();
+
+		for (int i = 0; i < sceneObjects.size(); i++)
+		{
+			if (ImGui::Selectable(sceneObjects[i]->Name.c_str(), selectedIndex == i)) {
+				selectedIndex = i;
+			}
+		}
 
 		ImGui::End();
 
-		ImGui::Begin("Object Properties");
-		static float dims[3] = { 1.0f, 1.0f, 1.0f };
-		if (ImGui::DragFloat3("Size (L/W/H)", dims, 0.01f, 0.1f, 10.0f)) {
-			myBox.Update(dims[0], dims[1], dims[2]);
+		ImGui::Begin("Inspector");
+		if (selectedIndex != -1) {
+			sceneObjects[selectedIndex]->UpdateUI();
 		}
+		else {
+			ImGui::Text("Select an object to edit");
+		}
+
 		ImGui::End();
+
 
 		ImGui::Begin("File Operations");
 		if (ImGui::Button("Export as STL"))
 		{
-			myBox.ExportToSTL("my_design.stl");
+			//myBox.ExportToSTL("my_design.stl");
 		}
 		ImGui::End();
 
@@ -145,11 +138,13 @@ int main() {
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 1.0f));
-		glm::mat4 mvp = myContextCamera.GetProjectMatrix() * myContextCamera.GetViewMatrix() * model;
+		glm::mat4 pv = myContextCamera.GetProjectMatrix() * myContextCamera.GetViewMatrix();
 		shader.use();
-		shader.setMat4("mvp", mvp);	
-		myBox.Draw(shader, showWireframe);
-		
+		for(auto& obj:sceneObjects)
+		{
+			shader.setMat4("pv", pv);
+			obj->Draw(shader);
+		}
 		
 		glfwSwapBuffers(window);
 	}

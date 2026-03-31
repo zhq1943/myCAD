@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Persinal\myCAD\extern\glm;D:\Persinal\myCAD\extern\imgui\backends;D:\Persinal\myCAD\extern\imgui;D:\Persinal\myCAD\extern\glfw\include;D:\Persinal\myCAD\extern\glad\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Persinal\myCAD\extern\glfw\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)extern\glm;$(ProjectDir)extern\imgui\backends;$(ProjectDir)extern\imgui;$(ProjectDir)extern\glfw\include;$(ProjectDir)extern\glad\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)extern\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>

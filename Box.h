@@ -3,24 +3,35 @@
 #include<vector>
 #include<cstring>
 #include"Shader.h"
+#include"Geometry.h"
 
-class Box {
-	float Length, Width, Height;
+class Box:public Geometry {
 	unsigned int VAO, VBO, EBO;
+	bool  mbShowWireFrame;
 public:
-	Box(float l = 1.0f, float w = 1.0f, float h = 1.0f)
-	:Length(l), Width(w), Height(h){
+	struct Vertex
+	{
+		glm::vec3 Position;
+		glm::vec3 Barycentric;
+	};
+	float Size[3] = { 1.0f,1.0f,1.0f };
+	Box(std::string name){
+		Name = name;
+		mbShowWireFrame = false;
 		initBuffers();
 		updateGeometry();
 	}
 
 
-	void Draw(Shader& shader, bool showWireFrame) {
+	void Draw(Shader& shader) {
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), Position);
+		shader.setMat4("u_Model", model);
+
 		//绘制填充面
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		shader.setVec4("u_Color", glm::vec4(0.7f, 0.7f, 0.7f, 1.0f));
 
-		if (showWireFrame)
+		if (mbShowWireFrame)
 		{
 			//开启多边形偏移，防止线条被遮挡
 			glEnable(GL_POLYGON_OFFSET_FILL);
@@ -31,7 +42,7 @@ public:
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
-		if (showWireFrame)
+		if (mbShowWireFrame)
 		{
 			glDisable(GL_POLYGON_OFFSET_FILL);
 			//绘制黑色边框
@@ -49,8 +60,25 @@ public:
 	}
 
 	void Update(float l, float w, float h) {
-		Length = l; Width = w; Height = h;
+		Size[0] = l; Size[1] = w; Size[2] = h;
 		updateGeometry();
+	}
+
+	void UpdateUI() override {
+		ImGui::InputText("Name", &Name[0], 64);
+		if (ImGui::DragFloat3("Position", &Position[0], 0.1f)) {
+			
+		}
+
+		if (ImGui::DragFloat3("Size", Size, 0.1f, 0.1f, 10.0f))
+		{
+			updateGeometry();
+		}
+
+		if (ImGui::Checkbox("WireFrame",&mbShowWireFrame))
+		{
+
+		}
 	}
 
 	//添加导出STL格式的函数
@@ -113,9 +141,9 @@ private:
 	}
 
 	void updateGeometry() {
-		float x = Length / 2.0f;
-		float y = Width / 2.0f;
-		float z = Height / 2.0f;
+		float x = Size[0] / 2.0f;
+		float y = Size[1] / 2.0f;
+		float z = Size[2] / 2.0f;
 
 		float newCoords[] = {
 			-x, -y, -z,  x, -y, -z,  x,  y, -z, -x,  y, -z, // 0-3
