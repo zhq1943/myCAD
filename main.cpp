@@ -103,6 +103,13 @@ int main() {
 		}
 		ImGui::End();
 
+		ImGui::Begin("File Operations");
+		if (ImGui::Button("Export as STL"))
+		{
+			myBox.ExportToSTL("my_design.stl");
+		}
+		ImGui::End();
+
 		ImGui::Render();
 
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)

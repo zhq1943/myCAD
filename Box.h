@@ -53,6 +53,41 @@ public:
 		updateGeometry();
 	}
 
+	//添加导出STL格式的函数
+	void ExportToSTL(const std::string& filename) {
+		std::ofstream outFile(filename);
+		if (!outFile.is_open())
+		{
+			return;
+		}
+
+		outFile << "solid SimpleCAD_box\n";
+
+		for (int i = 0; i < 36; i += 3) {
+			glm::vec3 v1 = getVertexPos(indices[i]);
+			glm::vec3 v2 = getVertexPos(indices[i + 1]);
+			glm::vec3 v3 = getVertexPos(indices[i + 2]);
+
+			glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v1));
+
+			outFile << "facet normal" << normal.x << " " << normal.y << " " << normal.z << "\n";
+			outFile << "    outer loop\n";
+			outFile << "          vertex " << v1.x << " " << v1.y << " " << v1.z << "\n";
+			outFile << "          vertex " << v2.x << " " << v2.y << " " << v2.z << "\n";
+			outFile << "          vertex " << v3.x << " " << v3.y << " " << v3.z << "\n";
+			outFile << "     endloop\n";
+			outFile << "endfacet\n";
+		}
+
+		outFile << "endsolid SimpleCAD_Box\n";
+		outFile.close();
+		std::cout << "STL Exported to: " << filename << std::endl;
+	}
+
+	glm::vec3 getVertexPos(int index) {
+		return glm::vec3(vertices[index * 3], vertices[index * 3 + 1], vertices[index * 3 + 2]);
+	}
+
 private:
 	float vertices[24];
 	unsigned int indices[36] = {
