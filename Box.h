@@ -13,6 +13,13 @@ public:
 	{
 		glm::vec3 Position;
 		glm::vec3 Barycentric;
+		//float IsFeatureEdge;
+		Vertex(glm::vec3 pos, glm::vec3 Bary) {
+			Position = pos;
+			Barycentric = Bary;
+		};
+
+		Vertex() {};
 	};
 	float Size[3] = { 1.0f,1.0f,1.0f };
 	Box(std::string name){
@@ -94,17 +101,18 @@ public:
 	}
 
 	glm::vec3 getVertexPos(int index) {
-		return glm::vec3(vertexData[index].Position);
+		return glm::vec3(vData[index].Position);
 	}
 
 private:
-	Vertex vertexData[36];
+	std::vector<Vertex> vData;
 	/*unsigned int indices[36] = {
 		0, 1, 2, 2, 3, 0,  4, 5, 6, 6, 7, 4, // 前面
 		0, 4, 7, 7, 3, 0,  1, 5, 6, 6, 2, 1, // 侧面
 		3, 2, 6, 6, 7, 3,  0, 1, 5, 5, 4, 0  // 顶面
 	};*/
 	void initBuffers() {
+		vData.resize(36);
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
 		//glGenBuffers(1, &EBO);
@@ -112,7 +120,7 @@ private:
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vData.size()*sizeof(Vertex), NULL, GL_DYNAMIC_DRAW);
 
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -128,6 +136,16 @@ private:
 		float x = Size[0] / 2.0f;
 		float y = Size[1] / 2.0f;
 		float z = Size[2] / 2.0f;
+		vData.clear();
+		auto addFace = [&](glm::vec3 p0, glm::vec3 p1, glm::vec3 p2, glm::vec3 p3) {
+			vData.push_back(Vertex(p0, glm::vec3(1,0,0)));
+			vData.push_back(Vertex(p1, glm::vec3(0,1,0)));
+			vData.push_back(Vertex(p2, glm::vec3(0,1,1)));
+
+			vData.push_back(Vertex(p2, glm::vec3(1,0,0)));
+			vData.push_back(Vertex(p3, glm::vec3(0,1,0)));
+			vData.push_back(Vertex(p0, glm::vec3(0,1,1)));
+		};
 
 		//计算出八个基本顶点的坐标
 		glm::vec3 v0(-x, -y, -z);
@@ -138,6 +156,8 @@ private:
 		glm::vec3 v5(x, -y, z);
 		glm::vec3 v6(x, y, z);
 		glm::vec3 v7(-x, y, z);
+		//定义立方体12个三角形（6个面，每个面2个）
+		// 手动指定每个三角形的中线坐标分量
 
 		// 构建36个顶点（12个三角形），每个三角形顶点赋予重心坐标
 
@@ -160,19 +180,20 @@ private:
 
 		glm::vec3 vertexPositions[8] = { v0, v1, v2, v3, v4, v5, v6, v7 };
 
+
+
 		// 为每个三角形生成3个顶点
-		for (int i = 0; i < 12; i++) {
-			for (int j = 0; j < 3; j++) {
-				Vertex v;
-				v.Position = vertexPositions[triangleIndices[i][j]];
-				v.Barycentric = barycentricCoords[j];
-				vertexData[i * 3 + j] = v;
-			}
-		}
+		addFace(vertexPositions[0], vertexPositions[1], vertexPositions[2], vertexPositions[3]);
+		addFace(vertexPositions[4], vertexPositions[5], vertexPositions[6], vertexPositions[7]);
+		addFace(vertexPositions[0], vertexPositions[4], vertexPositions[7], vertexPositions[3]);
+		addFace(vertexPositions[1], vertexPositions[5], vertexPositions[6], vertexPositions[2]);
+		addFace(vertexPositions[3], vertexPositions[2], vertexPositions[6], vertexPositions[7]);
+		addFace(vertexPositions[0], vertexPositions[1], vertexPositions[5], vertexPositions[4]);
+
 
 		// 更新VBO数据，每个顶点包含Position(3 floats) + Barycentric(3 floats) = 6 floats
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexData), vertexData);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vData.size()*sizeof(Vertex), vData.data());
 
 		/*float newCoords[] = {
 			-x, -y, -z,  x, -y, -z,  x,  y, -z, -x,  y, -z, // 0-3
