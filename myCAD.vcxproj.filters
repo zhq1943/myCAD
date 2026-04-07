@@ -53,12 +53,33 @@
     <ClInclude Include="Geometry.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="grid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="LineSegment.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Arc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.fs">
       <Filter>资源文件</Filter>
     </None>
     <None Include="shader\default.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="grid.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="grid.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shader\SimpleColor.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shader\SimpleColor.vs">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>

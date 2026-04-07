@@ -16,7 +16,10 @@
 #include"Shader.h"
 #include"Camera.h"
 #include"Box.h"
+#include"grid.h"
 
+#include"LineSegment.h"
+#include"Arc.h"
 
 Camera myContextCamera;
 double lastX, lastY;
@@ -24,8 +27,36 @@ bool firstMouse = true;
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	if (!ImGui::GetIO().WantCaptureMouse) {
-		myContextCamera.Zoom(float(yoffset));
+		myContextCamera.ProcessScroll(float(yoffset));
 	}
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+	if (firstMouse)
+	{
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	double xoffset = xpos - lastX;
+	double yoffset = lastY - ypos;
+	lastX = xpos;
+	lastY = ypos;
+
+
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+	{
+		if (myContextCamera.Mode == CameraMode::DIM_3D)
+		{
+			myContextCamera.Rotate(xoffset, yoffset);
+		}
+		else {
+			myContextCamera.Panning(xoffset, yoffset);
+		}
+	}
+	
 }
 
 int main() {
@@ -45,8 +76,10 @@ int main() {
 	}
 
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -54,6 +87,10 @@ int main() {
 	ImGui_ImplOpenGL3_Init("#version 330");
 
 	Shader shader("shader/default.vs", "shader/default.fs");
+	Shader gridShader("shader/grid.vs", "shader/grid.fs");
+	Shader sampleShader("shader/SimpleColor.vs", "shader/SimpleColor.fs");
+
+	Grid infiniteGrid;
 
 	std::vector<std::shared_ptr<Geometry>> sceneObjects;
 	int selectedIndex = -1;
@@ -61,6 +98,7 @@ int main() {
 
 	while (!glfwWindowShouldClose(window))
 	{
+
 		glfwPollEvents();
 
 		ImGui_ImplOpenGL3_NewFrame();
@@ -74,12 +112,30 @@ int main() {
 			sceneObjects.push_back(std::make_shared<Box>(name));
 		}
 
+		if (ImGui::BeginPopup("AddObjectPopup")) {
+			if (ImGui::MenuItem("Line Segment")) {
+				sceneObjects.push_back(std::make_shared<LineSegment>("Line" + std::to_string(sceneObjects.size())));
+			}
+
+			if (ImGui::MenuItem("Arc/Ellipse")) {
+				sceneObjects.push_back(std::make_shared<Arc>("Arc" + std::to_string(sceneObjects.size())));
+			}
+
+			ImGui::EndPopup();
+		}
+
+		if (ImGui::Button("Add Entity ..."))
+		{
+			ImGui::OpenPopup("AddObjectPopup");
+		}
+
 		ImGui::Separator();
 
 		for (int i = 0; i < sceneObjects.size(); i++)
 		{
 			if (ImGui::Selectable(sceneObjects[i]->Name.c_str(), selectedIndex == i)) {
 				selectedIndex = i;
+				sceneObjects[i]->IsSelected = true;
 			}
 		}
 
@@ -103,30 +159,25 @@ int main() {
 		}
 		ImGui::End();
 
+		ImGui::Begin("View Controls");
+		const char* modes[] = { "3D Perspective", "2D Top View" };
+		int currentItem = (int)myContextCamera.Mode;
+
+		if (ImGui::Combo("View Mode", &currentItem, modes, 2))
+		{
+			myContextCamera.Mode = (CameraMode)currentItem;
+
+			if (myContextCamera.Mode == CameraMode::DIM_2D)
+			{
+
+			}
+		}
+
+		ImGui::End();
+
 		ImGui::Render();
 
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-		{
-			double xpos, ypos;
-			glfwGetCursorPos(window, &xpos, &ypos);
 
-			if (firstMouse) {
-				lastX = xpos; lastY = ypos;
-				firstMouse = false;
-			}
-
-			float xoffset = (float)(xpos - lastX);
-			float yoffset = (float)(lastY - ypos);
-			lastX = xpos; lastY = ypos;
-
-			if (!ImGui::GetIO().WantCaptureKeyboard)
-			{
-				myContextCamera.Rotate(xoffset, yoffset);
-			}
-		}
-		else {
-			firstMouse = true;
-		}
 
 
 		int display_w(0), display_h(0);
@@ -137,14 +188,35 @@ int main() {
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+		// 在窗口调整大小时获取最新的宽高比
+		float aspectRatio = (float)display_w / (float)display_h;
+		glm::mat4 projMat = myContextCamera.GetProjectMatrix(aspectRatio);
+		glm::mat4 viewMat = myContextCamera.GetViewMatrix();
 		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.5f, 1.0f, 1.0f));
-		glm::mat4 pv = myContextCamera.GetProjectMatrix() * myContextCamera.GetViewMatrix();
+		glm::mat4 pv = projMat * viewMat;
 		shader.use();
 		for(auto& obj:sceneObjects)
 		{
-			shader.setMat4("pv", pv);
-			obj->Draw(shader);
+			std::shared_ptr<Box> spBox = std::dynamic_pointer_cast<Box>(obj);
+			if (spBox)
+			{
+				shader.setMat4("pv", pv);
+				obj->Draw(shader);
+				continue;
+			}
+			
+			std::shared_ptr<LineSegment> spLine= std::dynamic_pointer_cast<LineSegment>(obj);
+			std::shared_ptr<Arc> spArc= std::dynamic_pointer_cast<Arc>(obj);
+			if (spLine || spArc)
+			{
+				sampleShader.setMat4("u_View", viewMat);
+				sampleShader.setMat4("u_Projection", projMat);
+				obj->Draw(sampleShader);
+			}
 		}
+
+		
+		infiniteGrid.Draw(gridShader, viewMat, projMat);
 		
 		glfwSwapBuffers(window);
 	}

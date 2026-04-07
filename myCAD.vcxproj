@@ -154,14 +154,21 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Arc.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="grid.h" />
+    <ClInclude Include="LineSegment.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="grid.fs" />
+    <None Include="grid.vs" />
     <None Include="shader\default.fs" />
     <None Include="shader\default.vs" />
+    <None Include="shader\SimpleColor.fs" />
+    <None Include="shader\SimpleColor.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

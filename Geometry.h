@@ -10,5 +10,6 @@ public:
 
 	virtual void Draw(class Shader& shader) = 0;
 	virtual void UpdateUI() = 0;
+	virtual void updateGeometry() = 0;
 	virtual ~Geometry() {};
 };

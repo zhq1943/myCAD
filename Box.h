@@ -132,7 +132,7 @@ private:
 		glEnableVertexAttribArray(1);
 	}
 
-	void updateGeometry() {
+	void updateGeometry() override{
 		float x = Size[0] / 2.0f;
 		float y = Size[1] / 2.0f;
 		float z = Size[2] / 2.0f;
