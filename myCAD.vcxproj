@@ -144,6 +144,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="extern\dxfsrc\drw_classes.cpp" />
+    <ClCompile Include="extern\dxfsrc\drw_entities.cpp" />
+    <ClCompile Include="extern\dxfsrc\drw_header.cpp" />
+    <ClCompile Include="extern\dxfsrc\drw_objects.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\drw_dbg.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\drw_textcodec.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgbuffer.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader15.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader18.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader21.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader24.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader27.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader32.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dwgutil.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dxfreader.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\dxfwriter.cpp" />
+    <ClCompile Include="extern\dxfsrc\intern\rscodec.cpp" />
+    <ClCompile Include="extern\dxfsrc\libdwgr.cpp" />
+    <ClCompile Include="extern\dxfsrc\libdxfrw.cpp" />
     <ClCompile Include="extern\glad\src\glad.c" />
     <ClCompile Include="extern\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="extern\imgui\backends\imgui_impl_opengl3.cpp" />
@@ -152,11 +172,40 @@
     <ClCompile Include="extern\imgui\imgui_tables.cpp" />
     <ClCompile Include="extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyDXFReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arc.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="extern\dxfsrc\drw_base.h" />
+    <ClInclude Include="extern\dxfsrc\drw_classes.h" />
+    <ClInclude Include="extern\dxfsrc\drw_entities.h" />
+    <ClInclude Include="extern\dxfsrc\drw_header.h" />
+    <ClInclude Include="extern\dxfsrc\drw_interface.h" />
+    <ClInclude Include="extern\dxfsrc\drw_objects.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable932.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable936.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable949.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable950.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptables.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_dbg.h" />
+    <ClInclude Include="extern\dxfsrc\intern\drw_textcodec.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgbuffer.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader15.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader18.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader21.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader24.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader27.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader32.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dwgutil.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dxfreader.h" />
+    <ClInclude Include="extern\dxfsrc\intern\dxfwriter.h" />
+    <ClInclude Include="extern\dxfsrc\intern\rscodec.h" />
+    <ClInclude Include="extern\dxfsrc\libdwgr.h" />
+    <ClInclude Include="extern\dxfsrc\libdxfrw.h" />
+    <ClInclude Include="extern\dxfsrc\main_doc.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="grid.h" />
     <ClInclude Include="LineSegment.h" />

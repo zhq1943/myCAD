@@ -20,6 +20,7 @@
 
 #include"LineSegment.h"
 #include"Arc.h"
+#include"MyDXFReader.h"
 
 Camera myContextCamera;
 double lastX, lastY;
@@ -57,6 +58,36 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
 		}
 	}
 	
+}
+
+void ImportDXF(const std::string& filePath, std::vector<std::shared_ptr<Geometry>>& sceneObjects) {
+	// TODO: 实现导入 DXF 文件的逻辑
+	dxfRW reader(filePath.c_str());
+	MyDXFReader interface;
+
+	if (reader.read(&interface, false)) {
+		for (auto& obj : interface.tempObjects) {
+			sceneObjects.push_back(obj);
+		}
+	}else{
+		std::cout << "Failed to read DXF file" << std::endl;
+	}
+}
+
+void ExportDXF(const std::string& filePath, std::vector<std::shared_ptr<Geometry>>& sceneObjects) {
+	// TODO: 实现导出 DXF 文件的逻辑
+	dxfRW writer(filePath.c_str());
+	
+	DXFExportHandeler handler(&sceneObjects, &writer);
+
+	bool success = writer.write(&handler, DRW::AC1015, false);
+	if (success)
+	{
+		std::cout << "DXF Export successfully to" << filePath << std::endl;
+	}
+	else {
+		std::cerr << "Falied to export DXF!" << std::endl;
+	}
 }
 
 int main() {
@@ -175,10 +206,24 @@ int main() {
 
 		ImGui::End();
 
+		if(ImGui::BeginMainMenuBar())
+		{
+			if(ImGui::BeginMenu("File"))
+			{
+				if(ImGui::MenuItem("Open"))
+				{
+					ImportDXF("sample/my_design.dxf",sceneObjects);
+				}
+				if(ImGui::MenuItem("Export as DXF"))
+				{
+					ExportDXF("sample/my_design.dxf",sceneObjects);
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
 		ImGui::Render();
-
-
-
 
 		int display_w(0), display_h(0);
 		glfwGetFramebufferSize(window, &display_w, &display_h);

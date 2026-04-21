@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\dxfrw">
+      <UniqueIdentifier>{3ac7b8a5-53f9-46c4-a565-4a35d95c95f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\dxfrw\intern">
+      <UniqueIdentifier>{e10f03b7-6775-4379-aa8b-6f9872e26491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\dxfrw">
+      <UniqueIdentifier>{3551f4a9-eda1-4f43-8709-e4a6d47210d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\dxfrw\intern">
+      <UniqueIdentifier>{56cdcb74-d905-45b9-95c9-d09695b86c67}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +51,69 @@
     <ClCompile Include="extern\imgui\backends\imgui_impl_glfw.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="extern\dxfsrc\drw_classes.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\drw_entities.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\drw_header.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\drw_objects.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\libdwgr.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\libdxfrw.cpp">
+      <Filter>源文件\dxfrw</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\drw_dbg.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\drw_textcodec.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgbuffer.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader15.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader18.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader21.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader24.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader27.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgreader32.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dwgutil.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dxfreader.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\dxfwriter.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="extern\dxfsrc\intern\rscodec.cpp">
+      <Filter>源文件\dxfrw\intern</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDXFReader.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -61,6 +136,90 @@
     </ClInclude>
     <ClInclude Include="Arc.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_base.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_classes.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_entities.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_header.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_interface.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\drw_objects.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\libdwgr.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\libdxfrw.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\main_doc.h">
+      <Filter>头文件\dxfrw</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable932.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable936.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable949.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptable950.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_cptables.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_dbg.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\drw_textcodec.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgbuffer.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader15.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader18.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader21.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader24.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader27.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgreader32.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dwgutil.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dxfreader.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\dxfwriter.h">
+      <Filter>头文件\dxfrw\intern</Filter>
+    </ClInclude>
+    <ClInclude Include="extern\dxfsrc\intern\rscodec.h">
+      <Filter>头文件\dxfrw\intern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
